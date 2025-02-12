@@ -1,0 +1,16 @@
+# Ignorar logs
+logs/
+
+# Ignorar arquivos de configuração local
+config.local.json
+
+# Ignorar arquivos de IDE
+.idea/
+.vscode/
+
+# Ignorar arquivos de sistema
+.DS_Store
+
+.node_modules/
+
+.env
