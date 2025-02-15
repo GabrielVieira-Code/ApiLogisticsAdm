@@ -8,6 +8,11 @@ class VehicleRepository {
     return results;
   }
 
+  async listarDrivers() {
+    const [results] = await connection.query('SELECT * FROM driver');
+    return results;
+  }
+
   async criarVeiculo(plate, model, type, capacity, driver_id) {
     // Criando uma instância do modelo para validar os dados
     const veiculo = new VehicleModel(plate, model, type, capacity, driver_id);

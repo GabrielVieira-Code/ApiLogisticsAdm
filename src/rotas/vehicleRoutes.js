@@ -6,6 +6,9 @@ const router = express.Router();
 // Rota GET para listar veículos
 router.get('/data', VehicleController.listarVeiculos);
 
+router.get('/data/driver', VehicleController.listarVeiculos);
+
+
 // Rota POST para criar um novo veículo
 router.post('/data', VehicleController.criarVeiculo);
 
