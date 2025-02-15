@@ -15,6 +15,7 @@ router.put('/drivers/:id', DriverController.atualizarMotorista);
 // Rota DELETE para deletar um motorista
 router.delete('/drivers/:id', DriverController.deletarMotorista);
 
+
 // Rota GET para buscar um motorista por ID
 router.get('/drivers/:id', DriverController.buscarMotoristaPorId);
 
