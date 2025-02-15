@@ -12,7 +12,27 @@ Esta API foi criada para gerenciar informações sobre veículos e motoristas. E
 
 ## Estrutura do Projeto
 
-. ├── src/ │ ├── controllers/ │ │ └── driverController.js │ │ └── vehicleController.js │ ├── models/ │ │ └── driverModel.js │ │ └── vehicleModel.js │ ├── repositories/ │ │ └── driverRepository.js │ │ └── vehicleRepository.js │ ├── routes/ │ │ └── driverRoutes.js │ │ └── vehicleRoutes.js │ ├── services/ │ │ └── driverService.js │ │ └── vehicleService.js ├── .env ├── index.js ├── package.json ├── README.md
+.
+├── src/                       
+│   ├── controllers/            
+│   │   ├── driverController.js 
+│   │   ├── vehicleController.js 
+│   ├── models/                 
+│   │   ├── driverModel.js      
+│   │   ├── vehicleModel.js     
+│   ├── repositories/           
+│   │   ├── driverRepository.js 
+│   │   ├── vehicleRepository.js 
+│   ├── routes/                 
+│   │   ├── driverRoutes.js     
+│   │   ├── vehicleRoutes.js    
+│   ├── services/               
+│   │   ├── driverService.js    
+│   │   ├── vehicleService.js   
+├── .env                        
+├── index.js                    
+├── package.json                
+├── README.md                   
 
 bash
 Copiar
