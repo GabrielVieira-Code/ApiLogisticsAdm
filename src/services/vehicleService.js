@@ -1,34 +1,26 @@
-// services/vehicleService.js
-const VehicleRepository = require('../repositories/vehicleRepository');
+// src/services/vehicleService.js
+const vehicleRepository = require('../repositories/vehicleRepository');
 
 class VehicleService {
-  constructor() {
-    this.repository = VehicleRepository;
-  }
-
   async listarVeiculos() {
-    return await this.repository.listarVeiculos();
+    return await vehicleRepository.listarVeiculos();
   }
 
-  async criarVeiculo(dados) {
-    return await this.repository.criarVeiculo(dados);
+  async criarVeiculo(plate, model, type, capacity, driver_id) {
+    return await vehicleRepository.criarVeiculo(plate, model, type, capacity, driver_id);
   }
 
-  async atualizarVeiculo(id, dados) {
-    return await this.repository.atualizarVeiculo(id, dados);
+  async atualizarVeiculo(id, plate, model, type, capacity, driver_id) {
+    return await vehicleRepository.atualizarVeiculo(id, plate, model, type, capacity, driver_id);
   }
 
   async deletarVeiculo(id) {
-    await this.repository.deletarVeiculo(id);
+    return await vehicleRepository.deletarVeiculo(id);
   }
 
   async buscarPorMotorista(driver_id) {
-    return await this.repository.buscarPorMotorista(driver_id);
+    return await vehicleRepository.buscarPorMotorista(driver_id);
   }
 }
 
 module.exports = new VehicleService();
-
-
-
-

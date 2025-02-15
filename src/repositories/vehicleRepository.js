@@ -1,62 +1,56 @@
-// repositories/vehicleRepository.js
+// src/repositories/vehicleRepository.js
+const connection = require('../connectionDB/connectionDB');
 const VehicleModel = require('../models/vehicleModel');
 
 class VehicleRepository {
-  constructor() {
-    this.vehicleModel = VehicleModel;
-  }
-
   async listarVeiculos() {
-    return await this.vehicleModel.findAll();
+    const [results] = await connection.query('SELECT * FROM vehicle');
+    return results;
   }
 
-  async criarVeiculo(dados) {
-    return await this.vehicleModel.create(
-      dados.plate,
-      dados.model,
-      dados.type,
-      dados.capacity,
-      dados.driver_id
-    );
+  async criarVeiculo(plate, model, type, capacity, driver_id) {
+    // Criando uma instância do modelo para validar os dados
+    const veiculo = new VehicleModel(plate, model, type, capacity, driver_id);
+    veiculo.validar();  // Valida os dados
+
+    const query = `
+      INSERT INTO vehicle (plate, model, type, capacity, driver_id)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    const [results] = await connection.query(query, [plate, model, type, capacity, driver_id]);
+    return results.insertId;
   }
 
-  async atualizarVeiculo(id, dados) {
-    const resultado = await this.vehicleModel.update(
-      id,
-      dados.plate,
-      dados.model,
-      dados.type,
-      dados.capacity,
-      dados.driver_id
-    );
+  async atualizarVeiculo(id, plate, model, type, capacity, driver_id) {
+    const veiculo = new VehicleModel(plate, model, type, capacity, driver_id);
+    veiculo.validar();
 
-    if (resultado.affectedRows === 0) {
-      throw new Error('Veículo não encontrado');
-    }
-
-    return await this.vehicleModel.findById(id);
+    const query = `
+      UPDATE vehicle
+      SET plate = ?, model = ?, type = ?, capacity = ?, driver_id = ?
+      WHERE id = ?
+    `;
+    const [results] = await connection.query(query, [plate, model, type, capacity, driver_id, id]);
+    return results.affectedRows;
   }
 
   async deletarVeiculo(id) {
-    const resultado = await this.vehicleModel.delete(id);
-    
-    if (resultado.affectedRows === 0) {
-      throw new Error('Veículo não encontrado');
-    }
+    const query = 'DELETE FROM vehicle WHERE id = ?';
+    const [results] = await connection.query(query, [id]);
+    return results.affectedRows;
   }
 
   async buscarPorMotorista(driver_id) {
-    if (!driver_id) {
-      throw new Error('O ID do motorista é obrigatório.');
-    }
-    const veiculos = await this.vehicleModel.findByDriverId(driver_id);
-    
-    if (veiculos.length === 0) {
-      throw new Error('Nenhum veículo encontrado para este motorista');
-    }
-
-    return veiculos;
+    const query = `
+      SELECT v.id AS vehicle_id, v.plate, v.model, v.type, v.capacity,
+             d.id AS driver_id, d.first_name, d.last_name, d.email, d.phone
+      FROM vehicle v
+      JOIN driver d ON v.driver_id = d.id
+      WHERE v.driver_id = ?
+    `;
+    const [results] = await connection.query(query, [driver_id]);
+    return results;
   }
 }
 
-module.exports = VehicleRepository;
+module.exports = new VehicleRepository();

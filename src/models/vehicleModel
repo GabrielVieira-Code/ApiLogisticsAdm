@@ -1,122 +1,19 @@
-// models/vehicleModel.js
-const mysql = require('mysql2');
-const { createConnection } = require('../connectionDB/connectionDB.js');
-
+// src/models/vehicleModel.js
 class VehicleModel {
-  constructor() {
-    this.connection = createConnection();
+  constructor(plate, model, type, capacity, driver_id) {
+    this.plate = plate;
+    this.model = model;
+    this.type = type;
+    this.capacity = capacity;
+    this.driver_id = driver_id;
   }
 
-  async findAll() {
-    const query = 'SELECT * FROM vehicle';
-    return new Promise((resolve, reject) => {
-      this.connection.query(query, (error, results) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(results);
-      });
-    });
-  }
-
-  async findById(id) {
-    const query = 'SELECT * FROM vehicle WHERE id = ?';
-    return new Promise((resolve, reject) => {
-      this.connection.query(query, [id], (error, results) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(results[0]);
-      });
-    });
-  }
-
-  async create(plate, model, type, capacity, driver_id) {
-    const query = `
-      INSERT INTO vehicle (plate, model, type, capacity, driver_id)
-      VALUES (?, ?, ?, ?, ?)
-    `;
-    return new Promise((resolve, reject) => {
-      this.connection.query(query, [plate, model, type, capacity, driver_id], 
-        (error, results) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          resolve({ ...results, id: results.insertId });
-        }
-      );
-    });
-  }
-
-  async update(id, plate, model, type, capacity, driver_id) {
-    const query = `
-      UPDATE vehicle 
-      SET plate = ?, model = ?, type = ?, capacity = ?, driver_id = ?
-      WHERE id = ?
-    `;
-    return new Promise((resolve, reject) => {
-      this.connection.query(
-        query, 
-        [plate, model, type, capacity, driver_id, id],
-        (error, results) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          resolve(results);
-        }
-      );
-    });
-  }
-
-  async delete(id) {
-    const query = 'DELETE FROM vehicle WHERE id = ?';
-    return new Promise((resolve, reject) => {
-      this.connection.query(query, [id], (error, results) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(results);
-      });
-    });
-  }
-
-  async findByDriverId(driver_id) {
-    const query = `
-      SELECT 
-        v.id AS vehicle_id,
-        v.plate,
-        v.model,
-        v.type,
-        v.capacity,
-        v.creation_date AS vehicle_creation_date,
-        d.id AS driver_id,
-        d.first_name,
-        d.last_name,
-        d.email,
-        d.phone
-      FROM vehicle v
-      JOIN driver d ON v.driver_id = d.id
-      WHERE v.driver_id = ?
-    `;
-    return new Promise((resolve, reject) => {
-      this.connection.query(query, [driver_id], (error, results) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(results);
-      });
-    });
+  // Método de validação simples para verificar se todos os campos estão preenchidos
+  validar() {
+    if (!this.plate || !this.model || !this.type || !this.capacity || !this.driver_id) {
+      throw new Error('Todos os campos são obrigatórios');
+    }
   }
 }
 
-module.exports = new VehicleModel();
-
-
-
-
+module.exports = VehicleModel;
